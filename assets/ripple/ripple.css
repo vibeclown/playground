@@ -1,0 +1,45 @@
+.ripple-target {
+    --ripple-duration: 400ms;
+    --ripple-fade-duration: 200ms;
+    --ripple-wait-before-fade: 290ms;
+    --ripple-sparkle-duration: 600ms;
+    --ripple-sparkles-max-count: 2048;
+    --ripple-sparkles-opacity-level1: 0.2;
+    --ripple-sparkles-opacity-level2: 0.1;
+}
+
+.ripple-layer {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border-radius: inherit;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.ripple-node {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+}
+
+.ripple-sparkles {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    opacity: 1;
+    animation: shared-ripple-sparkles var(--ripple-sparkle-duration, 620ms) cubic-bezier(0.11, 0, 0.5, 0) forwards;
+}
+
+@keyframes shared-ripple-sparkles {
+    0% { opacity: 0.96; }
+    100% { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ripple-sparkles {
+        display: none;
+    }
+}

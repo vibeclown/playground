@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light">
+    <title>VibeClown playground</title>
+    <link rel="icon" type="image/png" href="assets/icons/favicon.png"/>
+    <link rel="stylesheet" href="./assets/ripple/ripple.css">
+    <link rel="stylesheet" href="./assets/styles.css">
+    <script>
+      window.VibeConfig = {
+        autoRun: false,
+        debug: false,
+        treeShakingDebug: true
+      };
+    </script>
+    <script src="./wasm/vibe_all.js"></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="top-bar">
+        <div class="brand">
+          <span class="brand-mark" aria-hidden="true">{:o)</span>
+          <div class="brand-copy">
+            <h1>VibeClown Playground</h1>
+            <p id="statusText">Loading compiler...</p>
+          </div>
+        </div>
+        <div class="actions" aria-label="Playground actions">
+          <a class="repo-link ripple-target" href="https://github.com/vibeclown" target="_blank" rel="noreferrer" title="Open VibeClown on GitHub" aria-label="Open VibeClown on GitHub">
+            <img src="./assets/icons/github.svg" width="22" height="22" alt="">
+          </a>
+        </div>
+      </header>
+
+      <main class="workspace">
+        <section class="pane editor-pane" aria-labelledby="editorTitle">
+          <div class="pane-toolbar">
+            <div>
+              <h2 id="editorTitle">main.clown</h2>
+              <span class="subtle">VibeClown source</span>
+            </div>
+            <span class="status-chip" id="sourceStats">0 lines</span>
+          </div>
+          <div id="sourceEditor" class="editor-host" aria-label="VibeClown source editor"></div>
+          <button class="editor-fab ripple-target" id="runButton" type="button" disabled title="Run" aria-label="Run code">
+            <span class="editor-fab__content">
+              <span class="editor-fab__icon" aria-hidden="true">
+                <img class="editor-fab__icon-image" src="./assets/icons/run.svg" width="30" height="30" alt="">
+              </span>
+              <span class="editor-fab__label">Run</span>
+            </span>
+          </button>
+        </section>
+
+        <section class="pane output-pane" aria-labelledby="terminalTitle">
+          <div class="pane-toolbar">
+            <div>
+              <h2 id="terminalTitle">Ocelog</h2>
+              <span class="subtle">compile and runtime output</span>
+            </div>
+            <div class="output-controls">
+              <div class="tabs" id="outputTabs" role="tablist" aria-label="Output view">
+                <button class="tab active ripple-target" id="terminalTab" type="button" role="tab" aria-selected="true">Ocelog</button>
+                <button class="tab ripple-target" id="jsTab" type="button" role="tab" aria-selected="false">JS</button>
+              </div>
+              <button class="clear-icon-button ripple-target" id="clearButton" type="button" title="Clear Ocelog" aria-label="Clear Ocelog">
+                <img src="./assets/icons/clear.svg" width="20" height="20" alt="">
+              </button>
+            </div>
+          </div>
+          <div class="output-stack">
+            <pre class="terminal active" id="terminalOutput" role="log" aria-live="polite"></pre>
+            <pre class="terminal js-output" id="jsOutput" aria-label="Compiled JavaScript"></pre>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <iframe id="runnerFrame" class="runner-frame" sandbox="allow-scripts" title="Sandboxed JavaScript runner"></iframe>
+    <script src="./assets/ripple/ripple.js"></script>
+    <script type="module" src="./app.js"></script>
+    <script>
+      window.setTimeout(() => {
+        if (document.querySelector(".cm-editor")) return;
+        const status = document.getElementById("statusText");
+        const host = document.getElementById("sourceEditor");
+        if (status) {
+          status.textContent = "Open via GitHub Pages or a local HTTP server";
+        }
+        if (host) {
+          host.textContent = "CodeMirror uses browser ES modules. Direct file:// opening blocks the local module in Chromium; serve this folder over http:// or publish it to GitHub Pages.";
+          host.classList.add("editor-host--fallback");
+        }
+      }, 3000);
+    </script>
+  </body>
+</html>
