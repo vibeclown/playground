@@ -1,7 +1,9 @@
+@import url("https://fonts.googleapis.com/css2?family=Google+Sans+Code:ital,wght,MONO@0,300..800,1;1,300..800,1&family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&display=swap");
+
 :root {
   --font-family-base: "Google Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
   --font-family-editor: "Google Sans Code", "Fira Code", "Cascadia Code", Consolas, monospace;
-  --font-family-console: "Fira Code", "Cascadia Code", Consolas, monospace;
+  --font-family-console: "Google Sans Code", "Fira Code", "Cascadia Code", Consolas, monospace;
 
   --md-sys-color-primary: #6750a4;
   --md-sys-color-on-primary: #ffffff;
