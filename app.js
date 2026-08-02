@@ -215,37 +215,12 @@ function appendBlock(text, kind) {
   }
 }
 
-function formatDiagnosticCliLike(diagnostic, filename = "main.clown") {
-  const severity = diagnostic.severity || "error";
-  const line = Math.max(1, Number(diagnostic.line || 1));
-  const column = Math.max(1, Number(diagnostic.column || 1));
-  const sourceLine = diagnostic.source_line || "";
-  const sourceLines = [
-    ...(diagnostic.context?.before || []),
-    { line, text: sourceLine },
-    ...(diagnostic.context?.after || [])
-  ];
-  const lineNumberWidth = Math.max(3, ...sourceLines.map((item) => String(item.line || "").length));
-  const gutter = `${" ".repeat(lineNumberWidth)} |`;
-  const caretPadding = " ".repeat(column - 1);
-  const output = [
-    `${severity}: ${diagnostic.message || String(diagnostic)}`,
-    `  --> ${filename}:${line}:${column}`,
-    ` ${gutter}`
-  ];
-
-  for (const item of sourceLines) {
-    output.push(`${String(item.line).padStart(lineNumberWidth, " ")} | ${item.text || ""}`);
-    if (item.line === line) {
-      output.push(` ${gutter} ${caretPadding}^`);
-    }
+function formatDiagnostic(diagnostic, filename = "main.clown") {
+  if (!window.Vibe || typeof window.Vibe.formatDiagnostic !== "function") {
+    return `${diagnostic.severity || "error"}: ${diagnostic.message || String(diagnostic)}`;
   }
 
-  if (diagnostic.hint) {
-    output.push(`   = help: ${diagnostic.hint}`);
-  }
-
-  return output.join("\n");
+  return window.Vibe.formatDiagnostic(diagnostic, filename);
 }
 
 function setActiveTab(next) {
@@ -461,14 +436,14 @@ async function runSource() {
       if (!result.success) {
         appendLine("compile failed", "error");
         for (const error of result.errors || []) {
-          appendBlock(formatDiagnosticCliLike(error), error.severity || "error");
+          appendBlock(formatDiagnostic(error), error.severity || "error");
         }
         jsOutput.textContent = "";
         return;
       }
 
       const warnings = result.warnings || [];
-      for (const warning of warnings) appendBlock(formatDiagnosticCliLike(warning), "warn");
+      for (const warning of warnings) appendBlock(formatDiagnostic(warning), "warn");
     compiledJs = result.code || "";
     jsOutput.textContent = compiledJs || "// compiler returned empty JavaScript";
     appendLine("compiled successfully", "ok");
